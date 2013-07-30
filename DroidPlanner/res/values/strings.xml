@@ -48,6 +48,7 @@
     <string name="Launch">Launch</string>
     <string name="RTL">RTL</string>
     <string name="Stabilize">Stabilize</string>
+    <string name="Land">Land</string>
     
     <string-array name="menu_dropdown">
         <item>Planning</item>

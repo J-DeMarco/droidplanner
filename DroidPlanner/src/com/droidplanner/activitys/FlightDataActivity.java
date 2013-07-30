@@ -36,7 +36,7 @@ public class FlightDataActivity extends SuperActivity implements
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 	private LatLng guidedPoint;
-	private Button launch, arm, disarm, rtl, stabilize;
+	private Button launch, arm, disarm, rtl, stabilize, land;
 	private RcOutput rcOutput;
 
 	@Override
@@ -66,11 +66,13 @@ public class FlightDataActivity extends SuperActivity implements
 		disarm = (Button) findViewById(R.id.disarm);
 		rtl = (Button) findViewById(R.id.rtl);
 		stabilize = (Button) findViewById(R.id.stabilize);
+		land = (Button) findViewById(R.id.land);
 		
 		// Button listeners
 		rtl.setOnClickListener(this);
 		stabilize.setOnClickListener(this);
 		launch.setOnTouchListener(this);
+		land.setOnTouchListener(this);
 		arm.setOnTouchListener(this);
 		disarm.setOnTouchListener(this);
 	}
@@ -156,6 +158,25 @@ public class FlightDataActivity extends SuperActivity implements
 		app.MAVClient.sendMavPacket(msg.pack());
 	}
 	
+	public void setLandPoint(waypoint wp) {
+		msg_mission_item msg = new msg_mission_item();
+		msg.seq = 0;
+		msg.current = 2;	//TODO use guided mode enum
+		msg.frame = 0; // TODO use correct parameter
+		msg.command = 20; // TODO use correct parameter
+		msg.param1 = 0; // TODO use correct parameter
+		msg.param2 = 0; // TODO use correct parameter
+		msg.param3 = 0; // TODO use correct parameter
+		msg.param4 = 0; // TODO use correct parameter
+		msg.x = (float) wp.coord.latitude;
+		msg.y = (float) wp.coord.longitude;
+		msg.z = wp.Height.floatValue();
+		msg.autocontinue = 1; // TODO use correct parameter
+		msg.target_system = 1;
+		msg.target_component = 1;
+		app.MAVClient.sendMavPacket(msg.pack());
+	}
+	
 	private void changeFlightMode(ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
@@ -215,6 +236,8 @@ public class FlightDataActivity extends SuperActivity implements
 			OnModeSpinnerSelected("RTL");
 		} else if (v.equals(stabilize)) {
 			OnModeSpinnerSelected("Stabilize");
+		} else if (v.equals(land)){
+			setLandPoint(new waypoint(drone.getPosition(), 0.0));
 		}
 	}
 	
@@ -228,6 +251,4 @@ public class FlightDataActivity extends SuperActivity implements
 			rcOutput.disableRcOverride();
 		}
 	}
-
-
 }

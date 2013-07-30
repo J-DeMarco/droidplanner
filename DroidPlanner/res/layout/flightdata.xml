@@ -61,8 +61,17 @@
 		    android:layout_height="wrap_content"
 		    android:layout_margin="10dp"
 		    android:padding="10dp"
-		    android:text="@string/RTL"
+		    android:text="@string/Land"
 		    android:layout_below="@+id/launch"
+		    android:id="@+id/land"
+	        />
+	    <Button 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:padding="10dp"
+		    android:text="@string/RTL"
+		    android:layout_below="@+id/land"
 		    android:id="@+id/rtl"
 	        />
 	    <Button 
